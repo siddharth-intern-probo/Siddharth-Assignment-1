@@ -2,14 +2,17 @@
 Create a CRUD API using NodeJs and MySQL
 
 ## Add a new User : POST
-(![image](https://user-images.githubusercontent.com/121893109/210728419-5ccf70b1-7d75-419a-bca2-eb259df1140f.png)
+![](https://github.com/siddharth-intern-probo/Siddharth-Assignment-1/blob/main/img/create_user.png)
 
 ## Get all users : GET
-![image](https://user-images.githubusercontent.com/121893109/210728465-7b685b39-ef40-494b-8fb7-51e65f6366df.png)
+![](https://github.com/siddharth-intern-probo/Siddharth-Assignment-1/blob/main/img/get_users.png)
 
 ## Update a user : PUT
+![](https://github.com/siddharth-intern-probo/Siddharth-Assignment-1/blob/main/img/update_user_1.png)
 Updated Value
+![](https://github.com/siddharth-intern-probo/Siddharth-Assignment-1/blob/main/img/update_user_2.png)
 
 ## Delete a user : DELETE
-
+![](https://github.com/siddharth-intern-probo/Siddharth-Assignment-1/blob/main/img/delete_user_1.png)
 Updated List
+![](https://github.com/siddharth-intern-probo/Siddharth-Assignment-1/blob/main/img/delete_user_2.png)

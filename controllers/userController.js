@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const {User} = require("../models/userModel");
+const generateToken = require("../config/tokenGenerator")
 
 const checkEmail = (email)=>{
     var emailFormat =  /^[a-zA-Z0-9_.+]*[a-zA-Z][a-zA-Z0-9_.+]*@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
@@ -16,9 +17,10 @@ const checkphoneNumber = (phoneNumber)=>{
 
 // check for user email before entry
 const createUser = asyncHandler(async(req,res)=>{
-    let data = new User(req.body.first_name,req.body.last_name,req.body.email,req.body.mobile,req.body.age);
+    let u = new User();
     try{
-        const [user, _] = await data.getUserByEmail(req.body.email);
+        user = await u.getUserByEmail(req.body.email);
+        console.log(user);
         if(!req.body.first_name || !req.body.last_name || !req.body.email || !req.body.mobile || !req.body.age) {
             res.status(204).json({message: "Please fill all the fields"});
         } else if(user.length>0) {
@@ -31,7 +33,7 @@ const createUser = asyncHandler(async(req,res)=>{
         } else if(checkphoneNumber(req.body.mobile)) {
             res.status(400).json({message: "Invalid phone number"});
         } else {
-            let user1 = await data.save();
+            let user1 = await u.createUser(req.body.first_name,req.body.last_name,req.body.email,req.body.mobile,req.body.age);
             res.status(200).json({"firstName":req.body.first_name,
             "lastName":req.body.last_name,    
             "email":req.body.email,
@@ -41,27 +43,31 @@ const createUser = asyncHandler(async(req,res)=>{
             "message": "User created"});
         }
     } catch(err) {
+        console.log(err);
         res.status(500).json({message: "Something went wrong"});
     }
 });
 
-const getUsers = asyncHandler(async(_,res)=>{
+const getUsers = asyncHandler(async(req,res)=>{
+    let u = new User();
     let offValue = req.query.page;
     let val = req.query.limit;
     try {
-        const users = await User.getUsers(val, offValue);
+        const users = await u.getUsers(val, offValue);
         res.status(200).json(users);
     } catch(err) {
+        console.log(err);
         res.status(500).json({message: "Something went wrong"});
     } 
 });
 
 const updateUser = asyncHandler(async(req,res)=>{
+    let u = new User();
     req.params.id = parseInt(req.params.id)
     var id = req.params.id;
     assert(!isNaN(id), 'id should be a number');
     assert(typeof id === 'number', 'id must be a number');
-    const user = await User.getUserByID(id);
+    const user = await u.getUserByID(id);
     if(user.length === 0) {
         res.status(404).json({message: "User not found"});
     } else{
@@ -71,7 +77,7 @@ const updateUser = asyncHandler(async(req,res)=>{
             }else if(checkphoneNumber(req.body.mobile)){
                 res.status(400).json({message: "Invalid phone number"});
             }else{
-                const users = await User.updateUser(req);
+                const users = await u.updateUser(req);
                 res.status(200).json({"firstName":req.body.first_name,
                 "lastName":req.body.last_name,    
                 "email":req.body.email,
@@ -86,16 +92,17 @@ const updateUser = asyncHandler(async(req,res)=>{
 })
 
 const deleteUser = asyncHandler(async(req,res)=>{
+    let u = new User();
     req.params.id = parseInt(req.params.id)
     var id = req.params.id;
     assert(!isNaN(id), 'id should be a number');
     assert(typeof id === 'number', 'id must be a number');
-    const user = await User.getUserByID(id);
+    const user = await u.getUserByID(id);
     if(user.length === 0) {
         res.status(404).json({message: "User not found"});
     } else{
         try{
-            users = await User.deleteUser(req.params.id);
+            users = await u.deleteUser(req.params.id);
             console.log(users);
             res.status(200).json({"message":"User deleted"});
         }catch(err){

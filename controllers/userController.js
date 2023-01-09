@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const {User} = require("../models/userModel");
 const generateToken = require("../config/tokenGenerator")
+const assert = require('assert');
 
 const checkEmail = (email)=>{
     var emailFormat =  /^[a-zA-Z0-9_.+]*[a-zA-Z][a-zA-Z0-9_.+]*@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
